@@ -37,7 +37,7 @@ class CreateItemUseCase:
 
     async def execute(self, dto: ItemCreateDTO) -> ItemDTO:
         """Create a new item"""
-        item = Item(name=dto.name, description=dto.description)
+        item = Item(name=dto.name, description=dto.description, expiration_date=dto.expiration_date)
         created_item = await self.repository.create(item, tag_ids=dto.tag_ids)
         return ItemDTO.model_validate(created_item)
 
@@ -60,6 +60,7 @@ class UpdateItemUseCase:
             current_item.name = dto.name
         if dto.description is not None:
             current_item.description = dto.description
+        current_item.expiration_date = dto.expiration_date
 
         updated_item = await self.repository.update(item_id, current_item, tag_ids=dto.tag_ids)
         return ItemDTO.model_validate(updated_item)

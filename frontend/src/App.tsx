@@ -81,6 +81,7 @@ function App() {
     name: string;
     description: string;
     tag_ids: number[];
+    expiration_date: string | null;
   }) => {
     try {
       const response = await fetch(`${API_URL}/items/`, {
@@ -92,6 +93,7 @@ function App() {
           name: data.name,
           description: data.description || "Created from React frontend",
           tag_ids: data.tag_ids,
+          expiration_date: data.expiration_date,
         }),
       });
 
@@ -146,6 +148,7 @@ function App() {
     name: string;
     description: string;
     tag_ids: number[];
+    expiration_date: string | null;
   }) => {
     if (!editingItem) return;
 
@@ -159,6 +162,7 @@ function App() {
           name: data.name,
           description: data.description,
           tag_ids: data.tag_ids,
+          expiration_date: data.expiration_date,
         }),
       });
 

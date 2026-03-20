@@ -17,6 +17,7 @@ describe("TaskForm", () => {
 
     expect(screen.getByLabelText(/task name/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/description/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/expiration date/i)).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: /create task/i }),
     ).toBeInTheDocument();
@@ -40,6 +41,7 @@ describe("TaskForm", () => {
         name: "Test Task",
         description: "",
         tag_ids: [],
+        expiration_date: null,
       });
     });
   });
@@ -64,6 +66,7 @@ describe("TaskForm", () => {
         name: "Test Task",
         description: "Test Description",
         tag_ids: [],
+        expiration_date: null,
       });
     });
   });
