@@ -8,6 +8,25 @@ interface TaskCardProps {
   onDragStart: (e: React.DragEvent<HTMLElement>, item: Item) => void;
 }
 
+function getExpirationDateColor(expirationDate: string): string {
+  const now = new Date();
+  const expDate = new Date(expirationDate);
+  const diffHours = (expDate.getTime() - now.getTime()) / (1000 * 60 * 60);
+
+  if (diffHours < 24) return "text-red-600";
+  if (diffHours < 72) return "text-orange-500";
+  return "text-slate-500";
+}
+
+function formatExpirationDate(expirationDate: string): string {
+  const date = new Date(expirationDate);
+  return date.toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
 export default function TaskCard({
   item,
   onDelete,
@@ -26,6 +45,14 @@ export default function TaskCard({
           <h3 className="text-sm font-medium text-slate-800">{item.name}</h3>
           {item.description && (
             <p className="mt-1 text-xs text-slate-500">{item.description}</p>
+          )}
+          {item.expiration_date && (
+            <p
+              data-testid={`expiration-date-${item.id}`}
+              className={`mt-1 text-xs font-medium ${getExpirationDateColor(item.expiration_date)}`}
+            >
+              Due: {formatExpirationDate(item.expiration_date)}
+            </p>
           )}
           {item.tags && item.tags.length > 0 && (
             <div className="mt-2 flex flex-wrap gap-1.5">

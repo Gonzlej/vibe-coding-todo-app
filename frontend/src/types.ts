@@ -13,6 +13,7 @@ export interface Item {
   name: string;
   description: string;
   tags: Tag[];
+  expiration_date?: string | null;
 }
 
 export interface Column {

@@ -122,4 +122,64 @@ describe("TaskCard", () => {
     expect(taskCard).toHaveClass("rounded-lg");
     expect(taskCard).toHaveClass("cursor-grab");
   });
+
+  it("renders expiration date when provided", () => {
+    const itemWithExpiration = {
+      ...mockItems.simple,
+      expiration_date: "2099-12-31",
+    };
+    render(<TaskCard {...defaultProps} item={itemWithExpiration} />);
+
+    const expirationEl = screen.getByTestId(
+      `expiration-date-${itemWithExpiration.id}`,
+    );
+    expect(expirationEl).toBeInTheDocument();
+  });
+
+  it("does not render expiration date when not provided", () => {
+    render(<TaskCard {...defaultProps} item={mockItems.simple} />);
+
+    expect(
+      screen.queryByTestId(`expiration-date-${mockItems.simple.id}`),
+    ).not.toBeInTheDocument();
+  });
+
+  it("shows expiration date in red when overdue", () => {
+    const overdueItem = {
+      ...mockItems.simple,
+      expiration_date: "2000-01-01",
+    };
+    render(<TaskCard {...defaultProps} item={overdueItem} />);
+
+    const expirationEl = screen.getByTestId(
+      `expiration-date-${overdueItem.id}`,
+    );
+    expect(expirationEl).toHaveClass("text-red-600");
+  });
+
+  it("shows expiration date in orange when between 24 and 72 hours", () => {
+    const now = new Date();
+    const in48h = new Date(now.getTime() + 48 * 60 * 60 * 1000);
+    const dateStr = in48h.toISOString().split("T")[0];
+    const orangeItem = { ...mockItems.simple, expiration_date: dateStr };
+    render(<TaskCard {...defaultProps} item={orangeItem} />);
+
+    const expirationEl = screen.getByTestId(
+      `expiration-date-${orangeItem.id}`,
+    );
+    expect(expirationEl).toHaveClass("text-orange-500");
+  });
+
+  it("shows expiration date in default color when more than 72 hours away", () => {
+    const now = new Date();
+    const in96h = new Date(now.getTime() + 96 * 60 * 60 * 1000);
+    const dateStr = in96h.toISOString().split("T")[0];
+    const defaultItem = { ...mockItems.simple, expiration_date: dateStr };
+    render(<TaskCard {...defaultProps} item={defaultItem} />);
+
+    const expirationEl = screen.getByTestId(
+      `expiration-date-${defaultItem.id}`,
+    );
+    expect(expirationEl).toHaveClass("text-slate-500");
+  });
 });

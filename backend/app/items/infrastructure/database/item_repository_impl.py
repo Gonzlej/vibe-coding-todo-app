@@ -27,6 +27,7 @@ class ItemRepositoryImpl(ItemRepository):
         orm_item = ItemORM(
             name=item.name,
             description=item.description,
+            expiration_date=item.expiration_date,
         )
 
         # Assign tags if provided
@@ -49,6 +50,7 @@ class ItemRepositoryImpl(ItemRepository):
 
         orm_item.name = item.name
         orm_item.description = item.description
+        orm_item.expiration_date = item.expiration_date
 
         # Update tags if provided
         if tag_ids is not None:

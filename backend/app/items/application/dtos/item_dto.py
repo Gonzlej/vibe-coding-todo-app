@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 
 from pydantic import BaseModel, ConfigDict
 
@@ -24,6 +24,7 @@ class ItemDTO(BaseModel):
     created_at: datetime
     updated_at: datetime | None = None
     tags: list[TagInItemDTO] = []
+    expiration_date: date | None = None
 
 
 class ItemCreateDTO(BaseModel):
@@ -32,6 +33,7 @@ class ItemCreateDTO(BaseModel):
     name: str
     description: str | None = None
     tag_ids: list[int] = []
+    expiration_date: date | None = None
 
 
 class ItemUpdateDTO(BaseModel):
@@ -40,3 +42,4 @@ class ItemUpdateDTO(BaseModel):
     name: str | None = None
     description: str | None = None
     tag_ids: list[int] | None = None
+    expiration_date: date | None = None

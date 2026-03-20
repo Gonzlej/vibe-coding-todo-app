@@ -8,6 +8,7 @@ interface TaskFormProps {
     name: string;
     description: string;
     tag_ids: number[];
+    expiration_date: string | null;
   }) => Promise<void>;
   onCancel: () => void;
   onCreateTag: (tagData: TagCreateData) => Promise<TagType>;
@@ -34,23 +35,33 @@ export default function TaskForm({
       ? initialData.tags?.map((tag) => tag.id) || []
       : [],
   );
+  const [expirationDate, setExpirationDate] = useState(
+    mode === "edit" && initialData ? initialData.expiration_date || "" : "",
+  );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!name.trim()) return;
 
-    await onSubmit({ name, description, tag_ids: selectedTagIds });
+    await onSubmit({
+      name,
+      description,
+      tag_ids: selectedTagIds,
+      expiration_date: expirationDate || null,
+    });
 
     // Reset form
     setName("");
     setDescription("");
     setSelectedTagIds([]);
+    setExpirationDate("");
   };
 
   const handleCancel = () => {
     setName("");
     setDescription("");
     setSelectedTagIds([]);
+    setExpirationDate("");
     onCancel();
   };
 
@@ -89,6 +100,22 @@ export default function TaskForm({
           placeholder="Enter description"
           rows={3}
           className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+        />
+      </div>
+      <div>
+        <label
+          htmlFor="task-expiration-date"
+          className="block text-sm font-medium text-slate-700 mb-1"
+        >
+          Expiration date (optional)
+        </label>
+        <input
+          id="task-expiration-date"
+          data-testid="task-expiration-date-input"
+          type="date"
+          value={expirationDate || ""}
+          onChange={(e) => setExpirationDate(e.target.value)}
+          className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
         />
       </div>
       <div>
